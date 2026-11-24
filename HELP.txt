@@ -1,0 +1,14 @@
+NY-panel (Gateway) - Docker installer
+
+1) Upload this zip to the server, then:
+     apt-get install -y unzip   (if needed)
+     unzip ny-panel.zip && cd ny-panel
+     sudo bash install.sh
+2) After install, manage with:  NY-panel
+     NY-panel restart | status | logs | port | password | domain | telegram | uninstall
+
+Files:
+  install.sh   -> runs NY-panel install
+  NY-panel     -> manager script (also installed to /usr/local/bin/NY-panel)
+  app/         -> project + Dockerfile + docker-compose.yml + Caddyfile
+                  (edit files here before install and they will be used)

@@ -1,0 +1,36 @@
+services:
+  gateway:
+    build: .
+    image: ny-panel:latest
+    container_name: ny-panel
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: "8000"
+      DATA_DIR: /data
+    ports:
+      - "${BIND_ADDR:-0.0.0.0}:${PANEL_PORT:-8000}:8000"
+    volumes:
+      - ./data:/data
+
+  # فقط وقتی دامنه تنظیم شده باشد (profile: https) بالا می‌آید و TLS خودکار می‌گیرد
+  caddy:
+    image: caddy:2-alpine
+    container_name: ny-panel-caddy
+    profiles: ["https"]
+    restart: unless-stopped
+    depends_on:
+      - gateway
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:-}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
